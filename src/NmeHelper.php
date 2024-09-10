@@ -345,4 +345,20 @@ class NmeHelper {
     // include country?
     $this->includeCountry = CRM_Utils_Request::retrieve('include_country', 'String');
   }
+
+  public function getCheckboxGroup($checkboxName, $checkboxLabel, $checkboxItems, $defaultValue) {
+    $html = '<fieldset><legend>' . $checkboxLabel .'</legend>';
+
+    foreach ($checkboxItems as $checkboxValue => $checkboxLabel) {
+      $itemId = $checkboxName . $checkboxValue;
+      $checked = $checkboxValue == $defaultValue ? ' checked="checked"' : '';
+
+      $html .= '<input type="radio" id="' . $itemId .'" name="' . $checkboxName . '" value="' . $checkboxValue . '"' . $checked . '>';
+      $html .= '<label for="' . $itemId .'">' . $checkboxLabel .'</label><br>';
+    }
+
+    $html .= '</fieldset><br>';
+
+    return $html;
+  }
 }

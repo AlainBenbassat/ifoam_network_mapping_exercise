@@ -35,32 +35,22 @@ class NmeGroupPage {
         . '</ul>';
 
       $html .= '<p>You can also open the member in a new tab by right-clicking on the name and choosing "Open Link in New Tab".</p>';
-      $html .= '<p>Please fill in the information for everyone you know.</p>';
+      $html .= '<p>Please fill in the information for everyone you know:</p>';
 
       $dao = $helper->getGroupContacts($helper->groupId);
-      $html .= '<table>';
-      $html .= '<tr>';
 
-      if ($helper->includeCountry == 'yes') {
-        $html .= '<th>Country</th>';
-      }
-
-      $html .= '<th>Name</th>';
-      $html .= '</tr>';
+      $html .= '<ul>';
 
       while ($dao->fetch()) {
-        $html .= '<tr>';
-
-        if ($helper->includeCountry == 'yes') {
-          $html .= '<td>' . $dao->country . '</td>';
+        if ($helper->includeCountry == 'yes' && !empty($dao->country)) {
+          $html .= $dao->country . ' - ';
         }
 
-        $html .= '<td><a href="../contact?group_id=' . $helper->groupId . '&contact_id=' . $dao->id . '&cid=' . $helper->cid . '&cs=' . $helper->cs . '&include_country=' . $helper->includeCountry . '">'
-          . $dao->last_name . ', ' . $dao->first_name . '</a></td>';
-        $html .= '</tr>';
+        $html .= '<li><a href="../contact?group_id=' . $helper->groupId . '&contact_id=' . $dao->id . '&cid=' . $helper->cid . '&cs=' . $helper->cs . '&include_country=' . $helper->includeCountry . '">'
+          . $dao->last_name . ', ' . $dao->first_name . '</a></li>';
       }
-      $html .= '</table>';
 
+      $html .= '</ul>';
 
       $html .= '<p><br><a href="..">&lt; Back</p>';
     }
