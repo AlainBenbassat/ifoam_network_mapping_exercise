@@ -20,7 +20,12 @@ class NmeContactPage {
         . '<p>In case you want to go back to the previous page without saving your changes, please click on "Cancel and go back".</p>';
 
 
-      $html .= '<form>';
+      $url = 'admin-post.php' . '/?group_id=' . $helper->groupId . '&cid=' . $helper->cid . '&cs=' . $helper->cs . '&include_country=' . $helper->includeCountry;
+      $html .= '<form action="' . esc_url(admin_url($url)) . '" method="post">';
+
+      $html .= '<input type="hidden" name="action" value="ifoam_process_contact">';
+      $html .= '<input type="hidden" name="contact_id" value="' . $helper->contactId . '">';
+      $html .= '<input type="hidden" name="contact_name" value="' . $helper->contactName . '">';
 
       // question relationship level
       $html .= $helper->getCheckboxGroup('relationship_level', '<strong>How well do you know ' . $helper->contactName . '</strong>?', [

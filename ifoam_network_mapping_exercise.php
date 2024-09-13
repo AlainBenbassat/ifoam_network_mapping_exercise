@@ -34,9 +34,18 @@ function ifoam_network_mapping_exercise_add_short_code_group_page() {
   return NmeGroupPage::get();
 }
 
+function ifoam_network_mapping_exercise_process_contact_submit() {
+  require_once __DIR__ . '/src/NmeHelper.php';
+  $helper = new NmeHelper('contact_details');
+  $redirectTo = $helper->processContactSubmit();
+  wp_redirect($redirectTo);
+}
+
 register_activation_hook(__FILE__, 'ifoam_network_mapping_exercise_on_activate');
 
 add_shortcode('network_mapping_exercise_main_page', 'ifoam_network_mapping_exercise_add_short_code_main_page');
 add_shortcode('network_mapping_exercise_contact_page', 'ifoam_network_mapping_exercise_add_short_code_contact_page');
 add_shortcode('network_mapping_exercise_group_page', 'ifoam_network_mapping_exercise_add_short_code_group_page');
 
+add_action( 'admin_post_ifoam_process_contact', 'ifoam_network_mapping_exercise_process_contact_submit' );
+add_action( 'admin_post_nopriv_ifoam_process_contact', 'ifoam_network_mapping_exercise_process_contact_submit' );

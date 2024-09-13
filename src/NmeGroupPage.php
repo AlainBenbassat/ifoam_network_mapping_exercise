@@ -9,6 +9,12 @@ class NmeGroupPage {
       $helper = new NmeHelper('group_contacts');
 
       $html = '<h2>' . $helper->allowedGroups[$helper->groupId] . '</h2>';
+
+      if (($msg = get_transient( 'ifoam_message'))) {
+        $html .= $msg;
+        delete_transient('ifoam_message');
+      }
+
       if ($helper->includeCountry == 'yes') {
         $html .=
           '<p>As you can see below, the members of the Committee are sorted by country (first column) and name (second column). You can either search for a member by<p>'

@@ -361,4 +361,55 @@ class NmeHelper {
 
     return $html;
   }
+
+  public function processContactSubmit() {
+    $returnUrl = '../group/?group_id=' . $this->groupId . '&cid=' . $this->cid . '&cs=' . $this->cs . '&include_country=' . $this->includeCountry;
+
+    $this->contactId = $_POST['contact_id'];
+    $this->contactName = $_POST['contact_name'];
+
+    try {
+      // save the relationship level
+      $this->updateRelationshipLevel($_POST['relationship_level']);
+
+      // save the other questions related to the tags (the key is the parent tag)
+      foreach ($this->agreeDisagreeQuestions as $questionKey => $questionTitle) {
+        $tagIdToSet = $_POST[$questionKey];
+        if ($tagIdToSet != 0) {
+          if ($questionKey == 46) {
+            $disagreeId = $this->getTagId($questionKey, 'Anti organic');
+            $neutralId = $this->getTagId($questionKey, 'Neutral/Undecided');
+            $agreeId = $this->getTagId($questionKey, 'Pro organic');
+          }
+          else {
+            $disagreeId = $this->getTagId($questionKey, 'Disagrees with us');
+            $neutralId = $this->getTagId($questionKey, 'Neutral/Undecided');
+            $agreeId = $this->getTagId($questionKey, 'Agrees with us');
+          }
+
+          // see which tag we have to unset
+          $tagsToUnset = [];
+          if ($tagIdToSet != $disagreeId) {
+            $tagsToUnset[] = $disagreeId;
+          }
+          if ($tagIdToSet != $neutralId) {
+            $tagsToUnset[] = $neutralId;
+          }
+          if ($tagIdToSet != $agreeId) {
+            $tagsToUnset[] = $agreeId;
+          }
+
+          $this->updateAgreeDisagree($tagIdToSet, $tagsToUnset);
+        }
+      }
+
+      $msg = '<p style="padding: 5px; color: white; background-color: #00ba37; border-color: green; border-width: 3px">Saved information for ' . $_POST['contact_name'] . '</p>';
+    }
+    catch (Exception $e) {
+      $msg = '<p style="padding: 5px; color: white; background-color: lightcoral; border-color: red; border-width: 3px">Information not saved: ' . $e->getMessage() . '</p>';
+    }
+
+    set_transient('ifoam_message', $msg, 30);
+    return $returnUrl;
+  }
 }
