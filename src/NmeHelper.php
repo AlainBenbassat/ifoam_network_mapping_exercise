@@ -365,7 +365,7 @@ class NmeHelper {
   public function processContactSubmit() {
     $returnUrl = '../group/?group_id=' . $this->groupId . '&cid=' . $this->cid . '&cs=' . $this->cs . '&include_country=' . $this->includeCountry;
 
-    $this->contactId = $_POST['contact_id'];
+    $this->contactId = (int)$_POST['contact_id'];
     $this->contactName = $_POST['contact_name'];
 
     try {
@@ -374,7 +374,7 @@ class NmeHelper {
 
       // save the other questions related to the tags (the key is the parent tag)
       foreach ($this->agreeDisagreeQuestions as $questionKey => $questionTitle) {
-        $tagIdToSet = $_POST[$questionKey];
+        $tagIdToSet = (int)$_POST[$questionKey];
         if ($tagIdToSet != 0) {
           if ($questionKey == 46) {
             $disagreeId = $this->getTagId($questionKey, 'Anti organic');
