@@ -4,9 +4,15 @@ require_once __DIR__ . '/NmeHelper.php';
 
 class NmeGroupPage {
   public static function get() {
+    $html = '<p>You are not authorised to access this page. Please contact communication@organicseurope.bio if you are a Board our Council Member.</p>';
+
     try {
       // make sure we are allowed to see this page
       $helper = new NmeHelper('group_contacts');
+
+      if ($helper->currentUserContactId == 0) {
+        throw new Exception('Not allowed');
+      }
 
       $html = '<h2>' . $helper->allowedGroups[$helper->groupId] . '</h2>';
 
@@ -49,16 +55,19 @@ class NmeGroupPage {
 
       while ($dao->fetch()) {
         if ($helper->includeCountry == 'yes' && !empty($dao->country)) {
-          $html .= $dao->country . ' - ';
+          $html .= '<li>' . $dao->country . ' - ';
+        }
+        else {
+          $html .= '<li>';
         }
 
-        $html .= '<li><a href="../contact?group_id=' . $helper->groupId . '&contact_id=' . $dao->id . '&cid=' . $helper->cid . '&cs=' . $helper->cs . '&include_country=' . $helper->includeCountry . '">'
+        $html .= '<a href="../contact?group_id=' . $helper->groupId . '&contact_id=' . $dao->id . '&cid=' . $helper->cid . '&cs=' . $helper->cs . '&include_country=' . $helper->includeCountry . '">'
           . $dao->last_name . ', ' . $dao->first_name . '</a></li>';
       }
 
       $html .= '</ul>';
 
-      $html .= '<p><br><a href="..">&lt; Back</p>';
+      $html .= '<p><br><a href="../?&cid=' . $helper->cid . '&cs=' . $helper->cs . '&include_country=' . $helper->includeCountry . '">&lt; Cancel and go back</a></p>';
     }
     catch (Exception $e) {
       $myErrors = new WP_Error('required', $e->getMessage());

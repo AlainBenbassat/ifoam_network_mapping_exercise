@@ -5,16 +5,18 @@ class NmeHelper {
 
   public $allowedGroups = [
     'sep-1' => 'For the European Parliament they include:',
-    270 => 'AGRI (Agriculture & Rural Development) - Committee members and substitutes',
-    271 => 'ENVI (Environment, Public Health & Food Safety) - Committee members and substitutes',
-    428 => 'IMCO (Internal Market & Consumer Protection) - Committee members and substitutes',
-    272 => 'ITRE (Industry, Research & Energy) - Committee members and substitutes',
+    865 => 'AGRI (Agriculture & Rural Development) - Committee members and substitutes',
+    870 => 'ENVI (Environment, Public Health & Food Safety) - Committee members and substitutes',
+    872 => 'IMCO (Internal Market & Consumer Protection) - Committee members and substitutes',
+    871 => 'ITRE (Industry, Research & Energy) - Committee members and substitutes',
     'sep-2' => 'For the European Commission they include:',
-    490 => 'Vice-President - Cabinet of Commissioner Frans TIMMERMANS',
+    // TODO: remove line below, and update group ids
+    '-' => '',
+    /* 490 => 'Vice-President - Cabinet of Commissioner Frans TIMMERMANS',
     485 => 'AGRI (Agriculture & Rural Development) - Cabinet of Commissioner Janusz WOJCIECHOWSKI',
     487 => 'ENVI (Environment, Oceans & Fisheries) - Cabinet of Commissioner Virginijus SINKEVICIUS',
     486 => 'RTD (Innovation, Research, Culture, Education & Youth) - Cabinet of Commissioner Mariya GABRIEL',
-    488 => 'SANTE (Health & Food Safety) - Cabinet of Commissioner Stella KYRIAKIDES',
+    488 => 'SANTE (Health & Food Safety) - Cabinet of Commissioner Stella KYRIAKIDES',*/
   ];
 
   public $context;
@@ -26,8 +28,8 @@ class NmeHelper {
   public $contactName;
   public $includeCountry;
 
-  public $currentUserName;
-  public $currentUserContactId;
+  public $currentUserName = '';
+  public $currentUserContactId = 0;
 
   public $relationshipBasic;
   public $relationshipMedium;
@@ -203,6 +205,26 @@ class NmeHelper {
     return CRM_Core_DAO::singleValueQuery($sql);
   }
 
+  public function getRelationshipLevel() {
+    $sql = "
+      select
+        ifnull(relationship_type_id, 0)
+      from
+        civicrm_relationship
+      where
+        contact_id_a = {$this->currentUserContactId}
+      and
+        contact_id_b = {$this->contactId}
+      and
+        relationship_type_id in ({$this->relationshipBasic}, {$this->relationshipMedium}, {$this->relationshipStrong})
+      and
+        is_active = 1
+      limit 0,1
+    ";
+
+    return CRM_Core_DAO::singleValueQuery($sql);
+  }
+
   private function checkUserAllowed() {
     $allowed = FALSE;
     $errorMessage = 'You are not allowed to access this page.';
@@ -324,8 +346,6 @@ class NmeHelper {
 
     $sql = "select id from civicrm_relationship_type where name_a_b = 'Strong relationship'";
     $this->relationshipStrong = CRM_Core_DAO::singleValueQuery($sql);
-
-
   }
 
   private function getQueryStringParams() {

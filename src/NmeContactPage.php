@@ -4,9 +4,15 @@ require_once __DIR__ . '/NmeHelper.php';
 
 class NmeContactPage {
   public static function get() {
+    $html = '<p>You are not authorised to access this page. Please contact communication@organicseurope.bio if you are a Board our Council Member.</p>';
+
     try {
       // make sure we are allowed to see this page
       $helper = new NmeHelper('contact_details');
+
+      if ($helper->currentUserContactId == 0) {
+        throw new Exception('Not allowed');
+      }
 
       $html = '<h2>' . $helper->contactName . '</h2>';
       $html .= '<p>Please fill in the following information for this member:<p>'
@@ -34,7 +40,7 @@ class NmeContactPage {
         $helper->relationshipMedium => 'Medium relationship (you can call them and they will take your call or call you back)',
         $helper->relationshipStrong => 'Strong relationship (you have dinner together at each other\'s house)',
       ],
-      0);
+      $helper->getRelationshipLevel());
 
       // dynamic questions
       foreach ($helper->agreeDisagreeQuestions as $questionKey => $questionTitle) {
