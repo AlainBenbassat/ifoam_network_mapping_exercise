@@ -39,7 +39,7 @@ class NmeGroupPage {
       }
 
       $html .=
-        '<p>When clicking on the name of a member (in green), you will be asked to indicate the following information:<p>'
+        '<p>When clicking on the name of a member, you will be asked to indicate the following information:<p>'
         . '<ul>'
         . '<li>your relationship level (if applicable),</li>'
         . '<li>their attitude towards organic (if known),</li>'

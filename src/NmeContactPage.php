@@ -74,7 +74,7 @@ class NmeContactPage {
         }
       }
 
-      $html .= '<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-large" value="Save Changes"></p>';
+      $html .= '<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary button-large" value="Submit"></p>';
       $html .= '</form>';
 
       $html .= '<p><br><a href="../group?group_id=' . $helper->groupId . '&cid=' . $helper->cid . '&cs=' . $helper->cs . '&include_country=' . $helper->includeCountry . '">&lt; Cancel and go back</a></p>';

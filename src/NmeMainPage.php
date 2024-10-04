@@ -4,7 +4,7 @@ require_once __DIR__ . '/NmeHelper.php';
 
 class NmeMainPage {
   public static function get() {
-    $html = '<p>You are not authorised to access this page. Please contact communication@organicseurope.bio if you are a Board our Council Member.</p>';
+    $html = '<p>You are not authorised to access this page. Please contact communication@organicseurope.bio if you are a Board or Council Member.</p>';
 
     try {
       // make sure we are allowed to see this page
