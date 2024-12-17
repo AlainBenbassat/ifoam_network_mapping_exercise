@@ -388,6 +388,8 @@ class NmeHelper {
     $this->contactId = (int)$_POST['contact_id'];
     $this->contactName = $_POST['contact_name'];
 
+    $loggingMessage = '';
+
     try {
       // save the relationship level
       $this->updateRelationshipLevel($_POST['relationship_level']);
@@ -419,9 +421,13 @@ class NmeHelper {
             $tagsToUnset[] = $agreeId;
           }
 
+          $loggingMessage .= $this->getAnswerForLogging($questionKey, $questionTitle, $tagIdToSet, $disagreeId, $neutralId, $agreeId);
+
           $this->updateAgreeDisagree($tagIdToSet, $tagsToUnset);
         }
       }
+
+      $this->logAnswer($loggingMessage);
 
       $msg = '<p style="padding: 5px; color: white; background-color: #00ba37; border-color: green; border-width: 3px">Saved information for ' . $_POST['contact_name'] . '</p>';
     }
@@ -431,5 +437,29 @@ class NmeHelper {
 
     set_transient('ifoam_message', $msg, 30);
     return $returnUrl;
+  }
+
+  private function getAnswerForLogging($questionKey, $questionTitle, $tagIdToSet, $disagreeId, $neutralId, $agreeId) {
+    if ($tagIdToSet == $disagreeId) {
+      $answer = $questionKey == 46 ? 'Anti organic' : 'Disagrees with us';
+    }
+    elseif ($tagIdToSet == $neutralId) {
+      $answer = $questionKey == 46 ? 'Neutral/Undecided' : 'Neutral/Undecided';
+    }
+    else {
+      $answer = $questionKey == 46 ? 'Pro organic' : 'Agrees with us';
+    }
+
+    return "<li>$questionTitle: $answer</li>";
+  }
+
+  private function logAnswer($loggingMessage) {
+    \Civi\Api4\Activity::create(FALSE)
+      ->addValue('activity_type_id', 81)
+      ->addValue('subject', $this->contactName)
+      ->addValue('details', '<ul>' . $loggingMessage . '</ul>')
+      ->addValue('status_id', 2)
+      ->addValue('source_contact_id', $this->currentUserContactId)
+      ->execute();
   }
 }
