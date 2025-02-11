@@ -10,13 +10,14 @@ class NmeHelper {
     872 => 'IMCO (Internal Market & Consumer Protection) - Committee members and substitutes',
     871 => 'ITRE (Industry, Research & Energy) - Committee members and substitutes',
     'sep-2' => 'For the European Commission they include:',
-    // TODO: remove line below, and update group ids
-    '-' => '',
-    /* 490 => 'Vice-President - Cabinet of Commissioner Frans TIMMERMANS',
-    485 => 'AGRI (Agriculture & Rural Development) - Cabinet of Commissioner Janusz WOJCIECHOWSKI',
-    487 => 'ENVI (Environment, Oceans & Fisheries) - Cabinet of Commissioner Virginijus SINKEVICIUS',
-    486 => 'RTD (Innovation, Research, Culture, Education & Youth) - Cabinet of Commissioner Mariya GABRIEL',
-    488 => 'SANTE (Health & Food Safety) - Cabinet of Commissioner Stella KYRIAKIDES',*/
+    917 => 'Commission Cabinet HANSEN',
+    933 => 'Commission Cabinet ZAHARIEVA',
+    935 => 'Commission Cabinet HOEKSTRA',
+    934 => 'Commission Cabinet ROSWALL',
+    937 => 'Commission Cabinet FITTO',
+    938 => 'Commission Cabinet VARHELYI',
+    936 => 'Commission Cabinet RIBERA',
+    939 => '[TP Organics] European Commission DGs contacts',
   ];
 
   public $context;
