@@ -17,7 +17,7 @@ class NmeHelper {
     937 => 'Commission Cabinet FITTO',
     938 => 'Commission Cabinet VARHELYI',
     936 => 'Commission Cabinet RIBERA',
-    939 => '[TP Organics] European Commission DGs contacts',
+    939 => '[TP Organics] R&I Advocacy Contacts',
   ];
 
   public $context;
